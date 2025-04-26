@@ -1,1 +1,3 @@
 # DS-Project
+
+This project implements a photo management application using custom data structures to organize, retrieve, and manage photos by tags. Each photo is associated with a set of tags, and albums can be created based on tag conditions. The system uses linked lists to store photos and tags initially and later improves performance through an inverted index built on a Binary Search Tree (BST). The report outlines the specifications of the classes, the design approach, critical implementation details, and a performance analysis comparing linear search and indexed search using Big-O notation.
