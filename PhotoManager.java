@@ -23,13 +23,13 @@ public class PhotoManager {
         List.findFirst();
         while ( !List.last())
         {
-           if (List.retrieve().getPath().compareToIgnoreCase(p)== 0)
+           if (List.retrieve().getPath().equalsIgnoreCase(p))
                return true;
 
            List.findNext();
         }
 
-        if (List.retrieve().getPath().compareToIgnoreCase(p)== 0)
+        if (List.retrieve().getPath().equalsIgnoreCase(p))
            return true;
 
         return false;
