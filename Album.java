@@ -22,25 +22,7 @@ public class Album {
         this.invmanager = invmanager;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getCondition() {
-        return condition;
-    }
-
-    public PhotoManager getManager() {
-        return manager;
-    }
-
-    public InvIndexPhotoManager getInvManager() {
-        return invmanager;
-    }
-
-    public int getNbComps() {
-        return NbComps;
-    }
+    
 
     public LinkedList<Photo> getPhotos() {
         int choice = menu();
@@ -74,14 +56,14 @@ public class Album {
             Rphotos.findFirst();
             while (!Rphotos.last()) {
                 Photo photo = Rphotos.retrieve();
-                if (!allAvilable(photo.allTags, Array))
+                if (!allAvilable(photo.TagsA, Array))
                     Rphotos.remove();
                 else
                     Rphotos.findNext();
             }
 
             Photo photo11 = Rphotos.retrieve();
-            if (!allAvilable(photo11.allTags, Array))
+            if (!allAvilable(photo11.TagsA, Array))
                 Rphotos.remove();
             else
                 Rphotos.findNext();
@@ -91,12 +73,12 @@ public class Album {
     }
 
     private boolean allAvilable(LinkedList<String> AllTags, String[] Array) {
-        boolean continue1 = true;
+        boolean continuego = true;
 
         if (AllTags.empty()) {
-            continue1 = false;
+            continuego = false;
         } else {
-            for (int i = 0; i < Array.length && continue1; i++) {
+            for (int i = 0; i < Array.length && continuego; i++) {
                 boolean found_in_tags = false;
                 AllTags.findFirst();
 
@@ -116,46 +98,46 @@ public class Album {
                 }
 
                 if (!found_in_tags)
-                    continue1 = false;
+                    continuego = false;
             }
         }
 
-        return continue1;
+        return continuego;
     }
 
     private LinkedList<Photo> getPhotosBST() {
         BST<LinkedList<Photo>> photosBST = invmanager.getPhotos();
-        LinkedList<Photo> Rphotos = new LinkedList<Photo>();
+        LinkedList<Photo> Bstphotos = new LinkedList<Photo>();
         NbComps = 0;
         String[] tags;
 
         if (condition.equals("")) {
             if (photosBST.findkey(" "))
-                Rphotos = photosBST.retrieve();
+                Bstphotos = photosBST.retrieve();
         } else {
             tags = condition.split(" AND ");
 
             for (int i = 0; i < tags.length; i++) {
                 if (photosBST.findkey(tags[i])) {
                     if (i == 0) {
-                        LinkedList<Photo> miniTag = photosBST.retrieve();
-                        miniTag.findFirst();
-                        while (!miniTag.last()) {
-                            Rphotos.insert(miniTag.retrieve());
-                            miniTag.findNext();
+                        LinkedList<Photo> mTag = photosBST.retrieve();
+                        mTag.findFirst();
+                        while (!mTag.last()) {
+                           Bstphotos.insert(mTag.retrieve());
+                            mTag.findNext();
                         }
-                        Rphotos.insert(miniTag.retrieve());
+                        Bstphotos.insert(mTag.retrieve());
                     } else {
-                        Rphotos = intersectPhotos(Rphotos, photosBST.retrieve());
+                        Bstphotos = intersectPhotos(Bstphotos, photosBST.retrieve());
                     }
                 } else {
-                    Rphotos = new LinkedList<Photo>();
+                    Bstphotos = new LinkedList<Photo>();
                     break;
                 }
             }
         }
 
-        return Rphotos;
+        return  Bstphotos;
     }
 
     private LinkedList<Photo> intersectPhotos(LinkedList<Photo> list1, LinkedList<Photo> list2) {
@@ -207,6 +189,26 @@ public class Album {
             result.insert(list2.retrieve());
 
         return result;
+    }
+    
+    public String getName() {
+        return name;
+    }
+
+    public String getCondition() {
+        return condition;
+    }
+
+    public PhotoManager getManager() {
+        return manager;
+    }
+
+    public InvIndexPhotoManager getInvManager() {
+        return invmanager;
+    }
+
+    public int getNbComps() {
+        return NbComps;
     }
 
     private int menu() {
