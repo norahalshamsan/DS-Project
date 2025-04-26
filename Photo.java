@@ -1,6 +1,8 @@
+// File: Photo.java
+
 public class Photo {
     String path;
-    LinkedList<String> allTags = new LinkedList<>();
+    LinkedList<String> TagsA = new LinkedList<>();
 
     // Constructor
     public Photo(String path, LinkedList<String> tags) {
@@ -8,10 +10,10 @@ public class Photo {
         if (!tags.empty()) {
             tags.findFirst();
             while (!tags.last()) {
-                allTags.insert(tags.retrieve());
+                TagsA.insert(tags.retrieve());
                 tags.findNext();
             }
-            allTags.insert(tags.retrieve());  // insert the last element
+            TagsA.insert(tags.retrieve());
         }
     }
 
@@ -20,34 +22,33 @@ public class Photo {
         return path;
     }
 
-    // Return a fresh copy of allTags
+    // Return a fresh copy of TagsA
     public LinkedList<String> getTags() {
         LinkedList<String> copy = new LinkedList<>();
-        if (!allTags.empty()) {
-            allTags.findFirst();
-            while (!allTags.last()) {
-                copy.insert(allTags.retrieve());
-                allTags.findNext();
+        if (!TagsA.empty()) {
+            TagsA.findFirst();
+            while (!TagsA.last()) {
+                copy.insert(TagsA.retrieve());
+                TagsA.findNext();
             }
-            copy.insert(allTags.retrieve());
+            copy.insert(TagsA.retrieve());
         }
         return copy;
     }
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("Photo{path=")
-            .append(path)
-            .append(", allTags=");
-        if (!allTags.empty()) {
-            allTags.findFirst();
-            while (!allTags.last()) {
-                sb.append(allTags.retrieve()).append("; ");
-                allTags.findNext();
+        StringBuilder sb = new StringBuilder("Photo{path=");
+        sb = new StringBuilder(sb.toString() + path + ", allTags=");
+        if (!TagsA.empty()) {
+            TagsA.findFirst();
+            while (!TagsA.last()) {
+                sb = new StringBuilder(sb.toString() + TagsA.retrieve() + "; ");
+                TagsA.findNext();
             }
-            sb.append(allTags.retrieve());
+            sb = new StringBuilder(sb.toString() + TagsA.retrieve());
         }
-        sb.append("}");
+        sb = new StringBuilder(sb.toString() + "}");
         return sb.toString();
     }
 }
