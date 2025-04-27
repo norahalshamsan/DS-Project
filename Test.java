@@ -1,115 +1,114 @@
 public class Test {
     public static void main(String[] args) {
-    
         InvIndexPhotoManager invmanager = new InvIndexPhotoManager();
         PhotoManager manager = new PhotoManager();
-        
-        Photo photo1 = new Photo("hedgehog.jpg",toTagsLinkedList("animal, hedgehog, apple, grass, green"));
+
+        Photo photo1 = new Photo("hedgehog.jpg", toTagsLinkedList("animal, hedgehog, apple, grass, green"));
+        Photo photo2 = new Photo("bear.jpg", toTagsLinkedList("animal, bear, cab, grass, wind"));
+        Photo photo3 = new Photo("orange-butterfly.jpg", toTagsLinkedList("insect, butterfly, flower, color"));
+
         invmanager.addPhoto(photo1);
         manager.addPhoto(photo1);
-        
-        Photo photo2 = new Photo("bear.jpg",toTagsLinkedList("animal, bear, cab, grass, wind"));
         invmanager.addPhoto(photo2);
-        manager.addPhoto(photo1);
-        
-        Photo photo3 = new Photo("orange-butterfly.jpg",toTagsLinkedList("insect, butterfly, flower, color"));
+        manager.addPhoto(photo2);
         invmanager.addPhoto(photo3);
-        manager.addPhoto(photo1);
-        
+        manager.addPhoto(photo3);
+
+        System.out.println("\nContents of PhotoManager after additions:");
+        printPhotoManagerContents(manager);
+
+        System.out.println("\nContents of InvIndexPhotoManager after additions:");
+        printInvIndexPhotoManagerContents(invmanager);
+
         Album album1 = new Album("Album1", "bear", manager, invmanager);
         Album album2 = new Album("Album2", "animal AND grass", manager, invmanager);
         Album album3 = new Album("Album3", "", manager, invmanager);
-        
-        
-        System.out.println("Get photo1 path and tags:");
-        System.out.println("photo1 path: " + photo1.getPath());
-        
-        //You can get the list of tags of photo1 by calling photo1.getTags().
-        LinkedList<String> tags = photo1.getTags();
-        
-        //You can write a method that prints the list of tags of photo1.
-        System.out.println(photo1.getPath());
-        printLL(tags);
-        
-        System.out.println("\n\nGet album1 name, condition, and photos:");
-        System.out.println("album1 name: " + album1.getName());
-        System.out.println("album1 condition: " + album1.getCondition());
-         //You can get the list of photos in album2 by calling album2.getPhotos().
-        LinkedList<Photo> photos = album1.getPhotos();
-        //You can write a method that prints the list of photos in album2.
-        System.out.println(album1.getCondition());
-        printLLPhoto(photos);
-        System.out.printf("Number of comparisons of condition \"%s\" is %d", album1.getCondition(), album1.getNbComps());
-     
-        System.out.println("\n\nGet album2 name, condition, and photos:");
-        System.out.println("album2 name: " + album2.getName());
-        System.out.println("album2 condition: " + album2.getCondition());
-  //You can get the list of photos in album2 by calling album2.getPhotos().
-        photos = album2.getPhotos();
-        //You can write a method that prints the list of photos in album2.
-        System.out.println(album2.getCondition());
-        printLLPhoto(photos);
-        System.out.printf("Number of comparisons of condition \"%s\" is %d", album2.getCondition(), album2.getNbComps());
-      
-        System.out.println("\n\nGet album3 name, condition, and photos:");
-        System.out.println("album3 name: " + album3.getName());
-        System.out.println("album3 condition: " + album3.getCondition());
-  //You can get the list of photos in album2 by calling album2.getPhotos().
-        photos = album3.getPhotos();
-        //You can write a method that prints the list of photos in album2.
-        System.out.println(album3.getCondition());
-        printLLPhoto(photos);
-        System.out.printf("Number of comparisons of condition \"%s\" is %d", album3.getCondition(), album3.getNbComps());
 
-        
-        System.out.println("\n\nDelete the photo ’bear.jpg’:");
+        System.out.println("\nGet album1 details:");
+        printAlbum(album1);
+
+        System.out.println("\nGet album2 details:");
+        printAlbum(album2);
+
+        System.out.println("\nGet album3 details:");
+        printAlbum(album3);
+
+        System.out.println("\nDelete the photo 'bear.jpg':");
         manager.deletePhoto("bear.jpg");
-        
-        System.out.println("\n\nGet album3 name, condition, and photos:");
-        System.out.println("album3 name: " + album3.getName());
-        System.out.println("album3 condition: " + album3.getCondition());
-        //You can get the list of photos in album2 by calling album2.getPhotos().
-        photos = album3.getPhotos();
-        //You can write a method that prints the list of photos in album2.
-        System.out.println(album3.getCondition());
-        printLLPhoto(photos);
-        System.out.printf("Number of comparisons of condition \"%s\" is %d", album3.getCondition(), album3.getNbComps());
+        invmanager.deletePhoto("bear.jpg");
 
+        System.out.println("\nContents of PhotoManager after deletion:");
+        printPhotoManagerContents(manager);
+
+        System.out.println("\nContents of InvIndexPhotoManager after deletion:");
+        printInvIndexPhotoManagerContents(invmanager);
+
+        System.out.println("\nUpdated album3 details:");
+        album3 = new Album("Album3", "", manager, invmanager);
+        printAlbum(album3);
     }
-    
+
     private static LinkedList<String> toTagsLinkedList(String tags) {
-        LinkedList<String> result = new LinkedList<String>();
+        LinkedList<String> result = new LinkedList<>();
         String[] tagsArray = tags.split("\\s*,\\s*");
-        for (int i = 0; i < tagsArray.length; i++) {
-            result.insert(tagsArray[i]);
+        for (String tag : tagsArray) {
+            result.insert(tag);
         }
         return result;
     }
-    
-        private static void printLL(LinkedList<String> list){
-            list.findFirst();
-            if(list.empty()) 
-                return;
-            while(true)
-            {
-                System.out.print(list.retrieve() + " ");
-                if(list.last()) 
-                    return;
-                list.findNext();
-            }
-        }
 
-        private static void printLLPhoto(LinkedList<Photo> list){
-            list.findFirst();
-            if(list.empty()) 
-                return;
-            while(true)
-            {
-                System.out.println(list.retrieve().getPath());
-                if(list.last()) 
-                    return;
-                list.findNext();
+    private static void printLL(LinkedList<String> list) {
+        list.findFirst();
+        if (list.empty()) return;
+        while (true) {
+            System.out.print(list.retrieve() + " ");
+            if (list.last()) return;
+            list.findNext();
+        }
+    }
+
+    private static void printLLPhoto(LinkedList<Photo> list) {
+        list.findFirst();
+        if (list.empty()) return;
+        while (true) {
+            System.out.println(list.retrieve().getPath());
+            if (list.last()) return;
+            list.findNext();
+        }
+    }
+
+    private static void printPhotoManagerContents(PhotoManager manager) {
+        LinkedList<Photo> photos = manager.getPhotos();
+        printLLPhoto(photos);
+    }
+
+    private static void printInvIndexPhotoManagerContents(InvIndexPhotoManager invManager) {
+        BST<LinkedList<Photo>> bst = invManager.getPhotos();
+        String allTags = bst.inOrder();
+        if (allTags.length() == 0) {
+            System.out.println("No photos.");
+            return;
+        }
+        String[] tags = allTags.split(" AND ");
+        for (String tag : tags) {
+            if (bst.findkey(tag)) {
+                LinkedList<Photo> photos = bst.retrieve();
+                photos.findFirst();
+                while (!photos.last()) {
+                    System.out.println(photos.retrieve().getPath());
+                    photos.findNext();
+                }
+                System.out.println(photos.retrieve().getPath());
             }
         }
-    
+    }
+
+    private static void printAlbum(Album album) {
+        System.out.println("Album name: " + album.getName());
+        System.out.println("Album condition: " + album.getCondition());
+        LinkedList<Photo> photos = album.getPhotos();
+        System.out.println("Photos in album:");
+        printLLPhoto(photos);
+        System.out.printf("Number of comparisons of condition \"%s\" is %d\n", album.getCondition(), album.getNbComps());
+    }
 }
