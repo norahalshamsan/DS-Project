@@ -38,42 +38,38 @@ public class InvIndexPhotoManager {
     // Delete a photo
     public void deletePhoto(String path) {
         String allTags = InvertedIndex.inOrder();
-        if (allTags.length() == 0)
-            allTags += " ";
-        else
-            allTags += " AND " + " ";
+        if (allTags.length() == 0) return; // Nothing to delete
 
         String[] tags = allTags.split(" AND ");
 
         for (String tag : tags) {
-            if (!InvertedIndex.findkey(tag)) continue;
+            if (!InvertedIndex.findkey(tag)) continue; // Skip if tag not found
 
-            LinkedList<Photo> photos_inverted = InvertedIndex.retrieve();
-            photos_inverted.findFirst();
+            LinkedList<Photo> photos = InvertedIndex.retrieve();
+            boolean remove = false;
 
-            while (true) {
-                if (photos_inverted.retrieve().getPath().equalsIgnoreCase(path)) {
-                    photos_inverted.remove();
-                    break;
+            if (!photos.empty()) {
+                photos.findFirst();
+                while (true) {
+                    if (photos.retrieve().getPath().equalsIgnoreCase(path)) {
+                        photos.remove();
+                        remove = true;
+                        if (photos.empty()) break;
+                    } else if (photos.last()) {
+                        break;
+                    } else {
+                        photos.findNext();
+                    }
                 }
-                if (photos_inverted.last()) break;
-                photos_inverted.findNext();
             }
 
-            // Check again for last element after loop
-            if (!photos_inverted.empty() && 
-                photos_inverted.retrieve().getPath().equalsIgnoreCase(path)) {
-                photos_inverted.remove();
-            }
-
-            if (photos_inverted.getSize() == 0) {
-                InvertedIndex.removeKey(tag);
-            } else {
-                InvertedIndex.update(tag, photos_inverted);
+            if (photos.empty()) {
+                InvertedIndex.removeKey(tag); // Remove tag if no photos left
+            } else if (remove) {
+                InvertedIndex.update(tag, photos); // Update tag if list modified
             }
         }
     }
-
     // Return the inverted index of all managed photos
     public BST<LinkedList<Photo>> getPhotos() {
         return InvertedIndex;
