@@ -1,8 +1,4 @@
-/**
- *
- * @author Manal Alhihi
- * 
- */
+
 public class BST<T> {
         public class BSTNode <T> {
             public String key;
